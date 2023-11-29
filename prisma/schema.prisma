@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "sqlserver"
+//   url      = env("DATABASE_URL")
+// }
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Inventario {
+  id   Int @id @default(autoincrement())
+  artigo String
+  descricao String
+  descriArtigo String 
+  lote String
+  localizacao String
+  unidade String
+  quantidade String
+  armazem String
+  unidadeTrue Boolean
+  //updatedAt DateTime @updatedAt
+  
+}
+
+model InventarioContagens {
+id   Int @id @default(autoincrement())
+artigo String
+descriArtigo String
+quantidade String
+armazem String
+unidade String
+unidadeBase String
+localizacao String
+recontagem Boolean
+createdAt DateTime @default(now())
+userinventario UserInventario[] @relation("InvetarioToUser")
+}
+
+model UserInventario {
+id Int @id @default(autoincrement())
+userId String
+armazem String
+artigoId Int
+inventariocontagens InventarioContagens @relation("InvetarioToUser", fields: [artigoId], references: [id])
+createdAt DateTime @default(now())
+}
+
+model userArmazem {
+  id Int @id @default(autoincrement())
+  userId String
+  armazem String
+}
